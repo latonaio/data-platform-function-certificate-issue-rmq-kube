@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: data-platform-function-certificate-issue-rmq-kube
+  name: data-platform-function-certificate-issue-rmq-kube
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: data-platform-function-certificate-issue-rmq-kube
+      app: CERTIFICATE_ISSUE
+  template:
+    metadata:
+      labels:
+        run: data-platform-function-certificate-issue-rmq-kube
+        app: CERTIFICATE_ISSUE
+    spec:
+      hostname: data-platform-function-certificate-issue-rmq-kube
+      containers:
+        - name: data-platform-function-certificate-issue-rmq-kube
+          image: latonaio/data-platform-function-certificate-issue-rmq-kube
+          imagePullPolicy: Always
+          env:
+            - name: "RMQ_QUEUE_FROM"
+              value: "data-platform-function-certificate-issue-queue"
+            - name: "RMQ_QUEUE_TO_SQL"
+              value: ""
+            - name: "RMQ_QUEUE_TO_EX_CONF"
+              value: ""
+            - name: "RMQ_QUEUE_TO_HEADERS_SUB_FUNC"
+              value: ""
+            - name: "RMQ_QUEUE_TO_ITEMS_SUB_FUNC"
+              value: ""
+            - name: "RMQ_SESSION_CONTROL_QUEUE"
+              value: "data-platform-function-certificate-issue-session-control-queue"
+            - name: "DB_NAME"
+              value: "DataPlatformMastersAndTransactionsMysqlKube"
+            - name: MOUNT_PATH
+              value: "/volume"
+          envFrom:
+            - configMapRef:
+                name: env-config
+            - secretRef:
+                name: env-secret
+      volumes:
+        - name: certificate-issue-persistent-storage
+          persistentVolumeClaim:
+            claimName: data-platform-function-certificate-issue-pv-claim
+        - name: certificate-issue-storage
+          hostPath:
+            path: /mnt/data-platform-function-certificate-issue
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: data-platform-function-certificate-issue-rmq-kube
+  name: data-platform-function-certificate-issue-rmq-kube
+spec:
+  selector:
+    run: data-platform-function-certificate-issue-rmq-kube
+  type: NodePort
+  ports:
+    - name: api
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+      nodePort: 30801

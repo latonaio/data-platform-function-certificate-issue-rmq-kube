@@ -1,0 +1,30 @@
+{
+	"connection_key": "request",
+	"result": true,
+	"redis_key": "abcdefg",
+	"filepath": "/var/lib/aion/Data/rededge_sdc/abcdef.json",
+	"api_status_code": 200,
+	"runtime_session_id": "boi9ar543dg91ipdnspi099u231280ab0v8af0ew",
+	"business_partner": null,
+	"service_label": "CERTIFICATE_ISSUE",
+	"api_type": "creates",
+	"message": {
+		"OrderID": {
+			"OrderID": 124911110001,
+			"ExpiredDate": "1735052400"
+		}
+	},
+	"api_schema": "DPFMCertificateIssue",
+	"accepter": [
+		"ItemForX509"
+	],
+	"deleted": false,
+	"sql_update_result": null,
+	"sql_update_error": "",
+	"subfunc_result": null,
+	"subfunc_error": "",
+	"exconf_result": null,
+	"exconf_error": "",
+	"api_processing_result": true,
+	"api_processing_error": ""
+}
